@@ -3,7 +3,7 @@
 const Employee = require('../lib/Employee');
 
 // test every name [getName()], id [getId()], email [getEmail()], & getRole()
-describe("Employee", () => {
+describe("Employee class", () => {
     describe("Employee Name", () => {
         // name
         it("getName() should return employee name", () => {
@@ -11,7 +11,7 @@ describe("Employee", () => {
             const employee = new Employee(name);
             expect(employee.name).toBe(name);
         });
-
+    });
     describe("Employee ID", () => {
         // id
         it("getID() should return the employee ID number", () => {
@@ -37,8 +37,6 @@ describe("Employee", () => {
             const employee = new Employee("Henry Spencer", 1, "henry@psych.com");
             expect(employee.getRole()).toBe(role);
         });
-    });
-    
     });
 });
 
