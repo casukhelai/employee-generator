@@ -7,7 +7,7 @@ describe("Employee class", () => {
     describe("Employee Name", () => {
         // name
         it("getName() should return employee name", () => {
-            const name = "Henry Spencer";
+            const name = "Shawn Spencer";
             const employee = new Employee(name);
             expect(employee.name).toBe(name);
         });
@@ -16,7 +16,7 @@ describe("Employee class", () => {
         // id
         it("getID() should return the employee ID number", () => {
             const id = "1";
-            const employee = new Employee("Henry Spencer", id, "henry@psych.com");
+            const employee = new Employee("Shawn Spencer", id, "shawn@psych.com");
             expect(employee.id).toBe(id);
         });
     });
@@ -24,8 +24,8 @@ describe("Employee class", () => {
     describe("Employee Email", () => {
         // email
         it("getEmail() should return employee email", () => {
-            const email = "henry@psych.com";
-            const employee = new Employee("Henry Spencer", 1, email);
+            const email = "shawn@psych.com";
+            const employee = new Employee("Shawn Spencer", 1, email);
             expect(employee.getEmail()).toBe(email);
         });
     });
@@ -34,7 +34,7 @@ describe("Employee class", () => {
         // getRole() test
         it("getRole() should return 'employee' ", () => {
             const role = "Employee";
-            const employee = new Employee("Henry Spencer", 1, "henry@psych.com");
+            const employee = new Employee("Shawn Spencer", 1, "shawn@psych.com");
             expect(employee.getRole()).toBe(role);
         });
     });
