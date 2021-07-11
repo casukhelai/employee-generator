@@ -6,9 +6,9 @@ describe("Intern class", () => {
     describe("getSchool method", () => {
         // email
         it("getSchool() should return intern email", () => {
-            const email = "buzz@psych.com";
-            const intern = new Intern("Buzz McNab", 4, "buzz@psych.com", "University of Santa Barbara");
-            expect(intern.getEmail()).toBe(email);
+            const school = "University of Santa Barbara";
+            const intern = new Intern("Shawn Spencer", 1, "shawn@psych.com", "University of Santa Barbara");
+            expect(intern.getSchool()).toBe(school);
         });
     });
 });

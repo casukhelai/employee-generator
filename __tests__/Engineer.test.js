@@ -8,9 +8,9 @@ describe("Engineer class", () => {
     describe("Engineer Github", () => {
         // email
         it("getGithub() should return engineer github", () => {
-            const github = "brutongaster77";
-            const engineer = new Engineer("Burton Guster", 2, "burton@psych.com", github);
-            expect(engineer.getEmail()).toBe(github);
+            const github = "shawnspencer77";
+            const engineer = new Engineer("Shawn Spencer", 1, "shawn@psych.com", github);
+            expect(engineer.getGithub()).toBe(github);
         });
     });
     
