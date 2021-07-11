@@ -1,9 +1,17 @@
 // require packages
 const inquirer = require("inquirer");
 const fs = require("fs");
-const { inherits } = require("util");
+// const { inherits } = require("util");
 
 // require the team member JS scripts
+// const Employee = require("./lib/Employee");
+const Engineer = require("./lib/Engineer");
+const Manager = require("./lib/Manager");
+const Intern = require("./lib/Intern");
+const generateHTML = require("./lib/generateHTML")
+
+// create an employee array
+let employeesArr = [];
 
 // add prompts using inquirer
 const questions =
@@ -16,7 +24,7 @@ const questions =
     {
         type: "input",
         name: "id",
-        message: "What is the ID of the emmployee?"
+        message: "What is the ID of the employee?"
     },
     {
         type: "input",
@@ -84,17 +92,22 @@ internSchool = [
 ];
 
 
+function writeToHTML(html_file, data) {
+    // assume not writing to the same file everytime, since parameter is more specific
+    fs.writeFile(html, data, (err) =>
+    err ? console.log(err) : console.log("successfully created team profile"));
+}
 
-
-
-
-
-
-
-
-
-
-
+// TODO: Create a function to initialize app
+function init() {
+    console.log("Welcome to the team profile generator!\nHere you'll be able to keep members of your team in one place.\nPlease answer the following prompts:");
+    inquirer.prompt(questions)
+    .then(data => {
+        const info = generateMarkdown(data);
+        
+        writeToHTML("index.html", info);
+    })
+};
 
 
 
