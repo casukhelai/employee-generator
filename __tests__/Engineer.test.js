@@ -31,6 +31,7 @@ describe("Engineer class", () => {
         });
     });
 
+    // do I just need this???
     describe("Engineer Github", () => {
         // email
         it("getGithub() should return engineer github", () => {
