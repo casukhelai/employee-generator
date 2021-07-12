@@ -4,11 +4,11 @@ const fs = require("fs");
 // const { inherits } = require("util");
 
 // require the team member JS scripts
-// const Employee = require("./lib/Employee");
+const Employee = require("./lib/Employee");
 const Engineer = require("./lib/Engineer");
 const Manager = require("./lib/Manager");
 const Intern = require("./lib/Intern");
-const generateHTML = require("./lib/generateHTML")
+const generateHTML = require("./lib/generateHTML");
 
 // create an employee array
 let employeesArr = [];
