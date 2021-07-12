@@ -19,8 +19,17 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="team-area col-12 flex-wrap justify-content-between bg-secondary p-3">
-                {{ team }}
+            <div class="team-area col-4 flex-wrap justify-content-center bg-secondary p-3">
+                <!-- build one card and generate that in the HTML and JS such that it will be called and generate as many cards as needed -->
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                      <h2 class="card-title">${data.name}</h2>
+                      <h3><span style="font-weight:bold">Employee ID:</span> ${data.id}</h3>
+                      <p><span style="font-weight:bold">Role:</span> Unspecified</p>
+                      <!-- <p><span style="font-weight:bold">Office Number:</span> ${data.getOfficeNumber()}</p> -->
+                      <a href="mailto:${data.getEmail()}" class="card-link">${person.getEmail()}</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
