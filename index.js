@@ -106,7 +106,7 @@ const mainProfile = (function() {
         managerData();
     }
 
-    function askUser() {
+    const askUser = () => {
         //ask what user wants to do
         inquirer.prompt(continuePrompt)
         .them((choice => {
@@ -119,51 +119,52 @@ const mainProfile = (function() {
                     break;
                 case "I'm done":
                     writeFile(employeesArr);
+                    break;
             }
         }));  
     }
 
-// create the functions for creating info for the employeez
-const managerData = () => {
-    inquirer.prompt(managerQuestions)
-    .then(data => {
-       let manager = new Manager(data.name,data.id,data.email,data.officeNumber);
-       employeesArr.push(manager);
-    })
-    // call the function to create this case
-    askUser();
-}
-const engineerData = () => {
-    inquirer.prompt(engQuestions)
-    .then(data => {
-       let engineer = new Engineer(data.name,data.id,data.email,data.github);
-       employeesArr.push(engineer);
-    })
-    // call the function to create this case
-    askUser();
-}
-const internData = () => {
-    inquirer.prompt(internQuestions)
-    .then(data => {
-       let intern = new Intern(data.name,data.id,data.email,data.school);
-       employeesArr.push(intern);
-    })
-    // call the function to create this case
-    askUser();
-}
+    // create the functions for creating info for the employeez
+    const managerData = () => {
+        inquirer.prompt(managerQuestions)
+        .then(data => {
+        let manager = new Manager(data.name,data.id,data.email,data.officeNumber);
+        employeesArr.push(manager);
+        })
+        // call the function to create this case
+        askUser();
+    }
+    const engineerData = () => {
+        inquirer.prompt(engQuestions)
+        .then(data => {
+        let engineer = new Engineer(data.name,data.id,data.email,data.github);
+        employeesArr.push(engineer);
+        })
+        // call the function to create this case
+        askUser();
+    }
+    const internData = () => {
+        inquirer.prompt(internQuestions)
+        .then(data => {
+        let intern = new Intern(data.name,data.id,data.email,data.school);
+        employeesArr.push(intern);
+        })
+        // call the function to create this case
+        askUser();
+    }
 
-// Write file
-function writeFile(data){
-    let htmlTemplate = generateHTML(data);
+    // Write file
+    function writeFile(data){
+        let htmlTemplate = generateHTML(data);
 
-    fs.write("./dist/index.html", htmlTemplate, (err) => {
-        err ? console.log(err) : console.log("Your team profile has been successfully created! Deploy the HTML file in the browser to see your profile!")
-    })
-}
+        fs.write("./dist/index.html", htmlTemplate, (err) => {
+            err ? console.log(err) : console.log("Your team profile has been successfully created! Deploy the HTML file in the browser to see your profile!")
+        })
+    }
 
-return {
-    init: init,
-};
+    return {
+        init: init,
+    };
 
 })();
 
