@@ -13,8 +13,7 @@ const generateHTML = require("./lib/generateHTML");
 
 // add prompts using inquirer
 const managerQuestions =
-    inquirer
-    .prompt ([
+    [
         {
             type: "input",
             name: "name",
@@ -35,15 +34,13 @@ const managerQuestions =
             name: "officeNumber",
             message: "What is the manager's office number? (Required)"
         },
-    ]);
+    ];
 
 // create Engineer and Intern questions
-const engQuestions =
-    inquirer
-        .prompt ([
+const engQuestions = [
         {
             type: "input",
-            name: "employeeName",
+            name: "name",
             message: "What is the name of the engineer?"
         },
         {
@@ -61,12 +58,9 @@ const engQuestions =
             name: "github",
             message: "What is the engineer's github username?",  
         },
-    ]);
+];
 
-
-const internQuestions =
-    inquirer
-        .prompt ([
+const internQuestions = [
         {
             type: "input",
             name: "name",
@@ -87,20 +81,18 @@ const internQuestions =
             name: "school",
             message: "What school does the intern go to?"
         },
-        ]);
+        ];
 
 // need to ask if there are more individuals to be added
 
-const continuePrompt = 
-    inquirer
-    .prompt ([
+const continuePrompt = [
         {
             type: "list",
             name: "continue",
             message: "Do you want to add another team member?",
             choices: ["Engineer", "Intern", "I'm done"],
         }
-    ])
+    ];
 
 // GOTTA GO BACK TO BASICS....UGH THIS BIG OL FUNCTION IS MEANT EXECUTE THE WHOLE PROGRAM ISHYAAAAA *SMACKS HEAD*
 // ====== Create the actual profile ======
@@ -116,7 +108,7 @@ const mainProfile = (function() {
 
     function askUser() {
         //ask what user wants to do
-        continuePrompt
+        inquirer.prompt(continuePrompt)
         .them((choice => {
             switch (choice.option){
                 case "Engineer":
@@ -133,7 +125,7 @@ const mainProfile = (function() {
 
 // create the functions for creating info for the employeez
 const managerData = () => {
-    managerQuestions
+    inquirer.prompt(managerQuestions)
     .then(data => {
        let manager = new Manager(data.name,data.id,data.email,data.officeNumber);
        employeesArr.push(manager);
@@ -142,7 +134,7 @@ const managerData = () => {
     askUser();
 }
 const engineerData = () => {
-    engQuestions
+    inquirer.prompt(engQuestions)
     .then(data => {
        let engineer = new Engineer(data.name,data.id,data.email,data.github);
        employeesArr.push(engineer);
@@ -151,7 +143,7 @@ const engineerData = () => {
     askUser();
 }
 const internData = () => {
-    internQuestions
+    inquirer.prompt(internQuestions)
     .then(data => {
        let intern = new Intern(data.name,data.id,data.email,data.school);
        employeesArr.push(intern);
