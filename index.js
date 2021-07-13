@@ -1,114 +1,149 @@
 // require packages
 const inquirer = require("inquirer");
 const fs = require("fs");
-// const { inherits } = require("util");
+
 
 // require the team member JS scripts
-const Employee = require("./lib/Employee");
 const Engineer = require("./lib/Engineer");
 const Manager = require("./lib/Manager");
 const Intern = require("./lib/Intern");
 const generateHTML = require("./lib/generateHTML");
+const Employee = require("./lib/Employee");
 
 // create an employee array
 let employeesArr = [];
 
 // add prompts using inquirer
-const questions =
-[
-    {
-        type: "input",
-        name: "name",
-        message: "What is the name of this employee?"
-    },
-    {
-        type: "input",
-        name: "id",
-        message: "What is the ID of the employee?"
-    },
-    {
-        type: "input",
-        name: "email",
-        message: "What is their email?"
-    },
-    {
-        type: "list",
-        name: "role",
-        message: "what role does this employee have?",
-        choices: ["Manager", "Engineer", "Intern"]
-    },
-];
-
-// Ask specific questions for each role
-// Manager office number
-managerOffice = [
-    {
-        type: "input",
-        name: "officeNumber",
-        message: "What is the manager's office number? (Required)",
-        validate: officeNumber => {
-            if(officeNumber) {
-                return true;
-            } else {
-                console.log("Enter an office number please!");
-                return false;
-            }
+const managerQuestions = () => {
+    inquirer
+    .prompt ([
+        {
+            type: "input",
+            name: "name",
+            message: "What is the name of the manager?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is the manager's ID?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is their email?"
+        },
+        {
+            type: "input",
+            name: "officeNumber",
+            message: "What is the manager's office number? (Required)"
+        },
+        {
+            type: "list",
+            name: "nextEmployee",
+            message: "Would you like to add an Engineer or Intern?",
+            choices: ["Engineer","Intern"],
         }
-    }
-];
+    ])
+.then(managerData => {
+    let {name,id,email,officeNumber} = managerData;
+    const manager = new Manager(name,id,email,officeNumber);
 
-// Engineer github user
-engineerGit = [
-    {
-        type: "input",
-        name: "github",
-        message: "What is the engineer's github username?",
-        validate: github => {
-            if(github){
-                return true;
-            } else{
-                console.log("Please enter a username.");
-                return false;
-            }
-        }
-    }
-];
-
-// Intern school name
-internSchool = [
-    {
-        type: "input",
-        name: "school",
-        message: "What school does the intern go to?",
-        validate: school => {
-            if(school){
-                return true;
-            } else {
-                console.log("Please enter a school name.");
-                return false;
-            }
-        }
-    }
-];
-
-
-function writeToHTML(html_file, data) {
-    // assume not writing to the same file everytime, since parameter is more specific
-    fs.writeFile(html, data, (err) =>
-    err ? console.log(err) : console.log("successfully created team profile"));
-}
-
-// TODO: Create a function to initialize app
-function init() {
-    console.log("Welcome to the team profile generator!\nHere you'll be able to keep members of your team in one place.\nPlease answer the following prompts:");
-    inquirer.prompt(questions)
-    .then(data => {
-        const info = generateMarkdown(data);
-        
-        writeToHTML("index.html", info);
-    })
+    employeesArr.push(manager);
+    console.log(manager);
+})
 };
 
+// need to hold the other two options somewhere
+// rather than have three individual functions, have one function that holds both
+// WHILE checking if the input previous chosen was engineer or intern
+// if either are chosen, then the associated question will come up
+const createEmployee = () => {
+    inquirer
+        .prompt ([
+        {
+            type: "input",
+            name: "employeeName",
+            message: "What is the name of the employee?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is their ID?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is their email?"
+        },
+        {
+            type: "input",
+            name: "github",
+            message: "What is the engineer's github username?",
+            when: (input) => input.role === "Engineer"  
+        },
+        {
+            type: "input",
+            name: "school",
+            message: "What school does the intern go to?",
+            when: (input) => input.role === "Intern"
+        },
+        {
+            type: "confirm",
+            name: "continueGen",
+            message: "Would you like to add more members?",
+            default: false,
+        }
+    ])
+    .then(data => {
+        // so grab all the info and put it into an array
+        let {name,id,email,role,github,school,continueGen} = data;
+        let employee;
 
+        if(role === "Engineer"){
+            employee = new Engineer(name,id,email,github);
+            console.log(employee);
+        } else(role === "Intern")
+            employee = new Intern(name,id,email,school);
+            console.log(employee);
+        
+        employeesArr.push(employee);
+
+        // if yes is chosen in prompt, return back to createEmployee() 
+        // console.log(continueGen);
+        if(continueGen){
+            return createEmployee(employeesArr);
+        } else{
+            // Write HTML here
+            return employeesArr;
+        }
+    })
+
+
+};
+
+// Generate team profile
+const writeFile = data => {
+    // assume not writing to the same file everytime, since parameter is more specific
+    fs.writeFile("./dist/index.html", data, (err) =>
+    err ? console.log(err) : console.log("Your team profile has been successfully created! Deploy the HTML file in the browser to see your profile!"));
+}
+
+// Create a function to initialize app
+
+async function init() {
+    console.log("Welcome to the team profile generator!\nHere you'll be able to keep members of your team in one place.\nPlease answer the following prompts:");
+    await managerQuestions();
+    
+    createEmployee()
+        // .then(employeesArr => {
+        //     return generateHTML(employeesArr);
+        // })
+        // .then(indexHTML => {
+        //     return fs.writeFile(indexHTML);
+        // })
+        // writeToHTML(data)
+
+};
 
 init();
+
