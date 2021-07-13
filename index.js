@@ -13,8 +13,10 @@ const Employee = require("./lib/Employee");
 // create an employee array
 let employeesArr = [];
 
+// ======== Prompts ========
+
 // add prompts using inquirer
-const managerQuestions = () => {
+const managerQuestions =
     inquirer
     .prompt ([
         {
@@ -37,7 +39,7 @@ const managerQuestions = () => {
             name: "officeNumber",
             message: "What is the manager's office number? (Required)"
         },
-    ])
+    ]);
 // .then(managerData => {
 //     let {name,id,email,officeNumber} = managerData;
 //     const manager = new Manager(name,id,email,officeNumber);
@@ -45,10 +47,10 @@ const managerQuestions = () => {
 //     employeesArr.push(manager);
 //     console.log(manager);
 // })
-};
+
 
 // create Engineer and Intern questions
-const engQuestions = () => {
+const engQuestions =
     inquirer
         .prompt ([
         {
@@ -71,16 +73,16 @@ const engQuestions = () => {
             name: "github",
             message: "What is the engineer's github username?",  
         },
-    ])
-}
+    ]);
 
-const internQuestions = () => {
+
+const internQuestions =
     inquirer
         .prompt ([
         {
             type: "input",
-            name: "employeeName",
-            message: "What is the name of the employee?"
+            name: "name",
+            message: "What is the name of the intern?"
         },
         {
             type: "input",
@@ -97,72 +99,75 @@ const internQuestions = () => {
             name: "school",
             message: "What school does the intern go to?"
         },
-        ])
-}
-const createEmployee = () => {
+        ]);
+    // .then(data => {
+    //     // so grab all the info and put it into an array
+    //     let {name,id,email,role,github,school,continueGen} = data;
+    //     let employee;
+
+    //     if(role === "Engineer"){
+    //         employee = new Engineer(name,id,email,github);
+    //         console.log(employee);
+    //     } else(role === "Intern")
+    //         employee = new Intern(name,id,email,school);
+    //         console.log(employee);
+        
+    //     employeesArr.push(employee);
+
+    //     // if yes is chosen in prompt, return back to createEmployee() 
+    //     // console.log(continueGen);
+    //     if(continueGen){
+    //         return createEmployee(employeesArr);
+    //     } else{
+    //         // Write HTML here
+    //         return employeesArr;
+    //     }
+    // })
+
+// need to ask if there are more individuals to be added
+const continuePrompt = 
     inquirer
-        .prompt ([
+    .prompt ([
         {
-            type: "input",
-            name: "employeeName",
-            message: "What is the name of the employee?"
-        },
-        {
-            type: "input",
-            name: "id",
-            message: "What is their ID?"
-        },
-        {
-            type: "input",
-            name: "email",
-            message: "What is their email?"
-        },
-        {
-            type: "input",
-            name: "github",
-            message: "What is the engineer's github username?",
-            when: (input) => input.role === "Engineer"  
-        },
-        {
-            type: "input",
-            name: "school",
-            message: "What school does the intern go to?",
-            when: (input) => input.role === "Intern"
-        },
-        {
-            type: "confirm",
-            name: "continueGen",
-            message: "Would you like to add more members?",
-            default: false,
+            type: "list",
+            name: "continue",
+            message: "Do you want to add another team member?",
+            choices: ["Engineer", "Intern", "I'm done"],
         }
     ])
+
+
+// create the functions for creating info for the employeez
+const managerData = () => {
+    managerQuestions
     .then(data => {
-        // so grab all the info and put it into an array
-        let {name,id,email,role,github,school,continueGen} = data;
-        let employee;
-
-        if(role === "Engineer"){
-            employee = new Engineer(name,id,email,github);
-            console.log(employee);
-        } else(role === "Intern")
-            employee = new Intern(name,id,email,school);
-            console.log(employee);
-        
-        employeesArr.push(employee);
-
-        // if yes is chosen in prompt, return back to createEmployee() 
-        // console.log(continueGen);
-        if(continueGen){
-            return createEmployee(employeesArr);
-        } else{
-            // Write HTML here
-            return employeesArr;
-        }
+        employeesArr[employeesArr.length] = new Manager(data.name,data.id,data.email,data.officeNumber);
     })
 
+    // call the function to create this case
+    askUser();
+}
 
-};
 
+// ====== Create the actual profile ======
+const teamProfile = () => {
+    const askUser() => {
+        //ask what user wants to do
+        continuePrompt
+        .them((choice => {
+            switch (choice.option){
+                case "Engineer":
+                    engineerData();
+                    break;
+                case "Intern":
+                    internData();
+                    break;
+                case "I'm done":
+                    writeFile(employeesArr);
+            }
+        }))
+    }
+}
 // Generate team profile
 const writeFile = data => {
     // assume not writing to the same file everytime, since parameter is more specific
@@ -172,20 +177,13 @@ const writeFile = data => {
 
 // Create a function to initialize app
 
-async function init() {
-    console.log("Welcome to the team profile generator!\nHere you'll be able to keep members of your team in one place.\nPlease answer the following prompts:");
-    await managerQuestions();
+// function init() {
+//     console.log("Welcome to the team profile generator!\nHere you'll be able to keep members of your team in one place.\nPlease answer the following prompts:");
+//     managerQuestions();
     
-    createEmployee()
-        // .then(employeesArr => {
-        //     return generateHTML(employeesArr);
-        // })
-        // .then(indexHTML => {
-        //     return fs.writeFile(indexHTML);
-        // })
-        // writeToHTML(data)
+//     createEmployee()
 
-};
+// };
 
-init();
+// init();
 
