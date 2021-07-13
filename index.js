@@ -10,8 +10,7 @@ const Intern = require("./lib/Intern");
 const generateHTML = require("./lib/generateHTML");
 const Employee = require("./lib/Employee");
 
-// create an employee array
-let employeesArr = [];
+
 
 // ======== Prompts ========
 
@@ -125,6 +124,7 @@ const internQuestions =
     // })
 
 // need to ask if there are more individuals to be added
+
 const continuePrompt = 
     inquirer
     .prompt ([
@@ -136,22 +136,18 @@ const continuePrompt =
         }
     ])
 
-
-// create the functions for creating info for the employeez
-const managerData = () => {
-    managerQuestions
-    .then(data => {
-        employeesArr[employeesArr.length] = new Manager(data.name,data.id,data.email,data.officeNumber);
-    })
-
-    // call the function to create this case
-    askUser();
-}
-
-
 // ====== Create the actual profile ======
 const teamProfile = () => {
-    const askUser() => {
+    // create an employee array
+    let employeesArr = [];
+
+    // there's no better place for this init function, so i'm going to see if it works here
+    const init = () => {
+        console.log("Welcome to the team profile generator!\nHere you'll be able to keep members of your team in one place.\nPlease answer the following prompts:");
+        managerData();
+    }
+
+    function askUser() {
         //ask what user wants to do
         continuePrompt
         .them((choice => {
@@ -165,8 +161,20 @@ const teamProfile = () => {
                 case "I'm done":
                     writeFile(employeesArr);
             }
-        }))
+        }));  
     }
+}
+
+
+// create the functions for creating info for the employeez
+const managerData = () => {
+    managerQuestions
+    .then(data => {
+        employeesArr[employeesArr.length] = new Manager(data.name,data.id,data.email,data.officeNumber);
+    })
+
+    // call the function to create this case
+    askUser();
 }
 // Generate team profile
 const writeFile = data => {
@@ -178,7 +186,7 @@ const writeFile = data => {
 // Create a function to initialize app
 
 // function init() {
-//     console.log("Welcome to the team profile generator!\nHere you'll be able to keep members of your team in one place.\nPlease answer the following prompts:");
+//     
 //     managerQuestions();
     
 //     createEmployee()
