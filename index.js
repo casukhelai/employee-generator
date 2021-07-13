@@ -8,9 +8,6 @@ const Engineer = require("./lib/Engineer");
 const Manager = require("./lib/Manager");
 const Intern = require("./lib/Intern");
 const generateHTML = require("./lib/generateHTML");
-const Employee = require("./lib/Employee");
-
-
 
 // ======== Prompts ========
 
@@ -39,14 +36,6 @@ const managerQuestions =
             message: "What is the manager's office number? (Required)"
         },
     ]);
-// .then(managerData => {
-//     let {name,id,email,officeNumber} = managerData;
-//     const manager = new Manager(name,id,email,officeNumber);
-
-//     employeesArr.push(manager);
-//     console.log(manager);
-// })
-
 
 // create Engineer and Intern questions
 const engQuestions =
@@ -99,29 +88,6 @@ const internQuestions =
             message: "What school does the intern go to?"
         },
         ]);
-    // .then(data => {
-    //     // so grab all the info and put it into an array
-    //     let {name,id,email,role,github,school,continueGen} = data;
-    //     let employee;
-
-    //     if(role === "Engineer"){
-    //         employee = new Engineer(name,id,email,github);
-    //         console.log(employee);
-    //     } else(role === "Intern")
-    //         employee = new Intern(name,id,email,school);
-    //         console.log(employee);
-        
-    //     employeesArr.push(employee);
-
-    //     // if yes is chosen in prompt, return back to createEmployee() 
-    //     // console.log(continueGen);
-    //     if(continueGen){
-    //         return createEmployee(employeesArr);
-    //     } else{
-    //         // Write HTML here
-    //         return employeesArr;
-    //     }
-    // })
 
 // need to ask if there are more individuals to be added
 
@@ -136,8 +102,9 @@ const continuePrompt =
         }
     ])
 
+// GOTTA GO BACK TO BASICS....UGH THIS BIG OL FUNCTION IS MEANT EXECUTE THE WHOLE PROGRAM ISHYAAAAA *SMACKS HEAD*
 // ====== Create the actual profile ======
-const teamProfile = () => {
+const mainProfile = (function() {
     // create an employee array
     let employeesArr = [];
 
@@ -163,35 +130,51 @@ const teamProfile = () => {
             }
         }));  
     }
-}
-
 
 // create the functions for creating info for the employeez
 const managerData = () => {
     managerQuestions
     .then(data => {
-        employeesArr[employeesArr.length] = new Manager(data.name,data.id,data.email,data.officeNumber);
+       let manager = new Manager(data.name,data.id,data.email,data.officeNumber);
+       employeesArr.push(manager);
     })
-
     // call the function to create this case
     askUser();
 }
-// Generate team profile
-const writeFile = data => {
-    // assume not writing to the same file everytime, since parameter is more specific
-    fs.writeFile("./dist/index.html", data, (err) =>
-    err ? console.log(err) : console.log("Your team profile has been successfully created! Deploy the HTML file in the browser to see your profile!"));
+const engineerData = () => {
+    engQuestions
+    .then(data => {
+       let engineer = new Engineer(data.name,data.id,data.email,data.github);
+       employeesArr.push(engineer);
+    })
+    // call the function to create this case
+    askUser();
+}
+const internData = () => {
+    internQuestions
+    .then(data => {
+       let intern = new Intern(data.name,data.id,data.email,data.school);
+       employeesArr.push(intern);
+    })
+    // call the function to create this case
+    askUser();
 }
 
-// Create a function to initialize app
+// Write file
+function writeFile(data){
+    let htmlTemplate = generateHTML(data);
 
-// function init() {
-//     
-//     managerQuestions();
-    
-//     createEmployee()
+    fs.write("./dist/index.html", htmlTemplate, (err) => {
+        err ? console.log(err) : console.log("Your team profile has been successfully created! Deploy the HTML file in the browser to see your profile!")
+    })
+}
 
-// };
+return {
+    init: init,
+};
 
-// init();
+})();
+
+mainProfile.init();
+
 
