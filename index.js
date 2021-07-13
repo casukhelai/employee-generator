@@ -37,26 +37,68 @@ const managerQuestions = () => {
             name: "officeNumber",
             message: "What is the manager's office number? (Required)"
         },
-        {
-            type: "list",
-            name: "nextEmployee",
-            message: "Would you like to add an Engineer or Intern?",
-            choices: ["Engineer","Intern"],
-        }
     ])
-.then(managerData => {
-    let {name,id,email,officeNumber} = managerData;
-    const manager = new Manager(name,id,email,officeNumber);
+// .then(managerData => {
+//     let {name,id,email,officeNumber} = managerData;
+//     const manager = new Manager(name,id,email,officeNumber);
 
-    employeesArr.push(manager);
-    console.log(manager);
-})
+//     employeesArr.push(manager);
+//     console.log(manager);
+// })
 };
 
-// need to hold the other two options somewhere
-// rather than have three individual functions, have one function that holds both
-// WHILE checking if the input previous chosen was engineer or intern
-// if either are chosen, then the associated question will come up
+// create Engineer and Intern questions
+const engQuestions = () => {
+    inquirer
+        .prompt ([
+        {
+            type: "input",
+            name: "employeeName",
+            message: "What is the name of the engineer?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is their ID?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is their email?"
+        },
+        {
+            type: "input",
+            name: "github",
+            message: "What is the engineer's github username?",  
+        },
+    ])
+}
+
+const internQuestions = () => {
+    inquirer
+        .prompt ([
+        {
+            type: "input",
+            name: "employeeName",
+            message: "What is the name of the employee?"
+        },
+        {
+            type: "input",
+            name: "id",
+            message: "What is their ID?"
+        },
+        {
+            type: "input",
+            name: "email",
+            message: "What is their email?"
+        },
+        {
+            type: "input",
+            name: "school",
+            message: "What school does the intern go to?"
+        },
+        ])
+}
 const createEmployee = () => {
     inquirer
         .prompt ([
