@@ -7,7 +7,7 @@ const fs = require("fs");
 const Engineer = require("./lib/Engineer");
 const Manager = require("./lib/Manager");
 const Intern = require("./lib/Intern");
-const generateHTML = require("./lib/generateHTML");
+const { generateHTML } = require("./lib/generateHTML");
 
 // ======== Prompts ========
 
@@ -109,8 +109,9 @@ const mainProfile = (function() {
     const askUser = () => {
         //ask what user wants to do
         inquirer.prompt(continuePrompt)
-        .them((choice => {
-            switch (choice.option){
+        .then((choice => {
+            console.log(choice);
+            switch (choice.continue){
                 case "Engineer":
                     engineerData();
                     break;
@@ -128,36 +129,53 @@ const mainProfile = (function() {
     const managerData = () => {
         inquirer.prompt(managerQuestions)
         .then(data => {
-        let manager = new Manager(data.name,data.id,data.email,data.officeNumber);
+            // problem area
+        let manager = {
+            name: data.name,
+            id: data.id,
+            email: data.email,
+            officeNumber: data.officeNumber
+        }
+            
         employeesArr.push(manager);
+        askUser();
         })
         // call the function to create this case
-        askUser();
+        
     }
     const engineerData = () => {
         inquirer.prompt(engQuestions)
         .then(data => {
-        let engineer = new Engineer(data.name,data.id,data.email,data.github);
+        let engineer = {
+            name: data.name,
+            id: data.id,
+            email: data.email,
+            github: data.github
+        }
         employeesArr.push(engineer);
+        askUser();
         })
         // call the function to create this case
-        askUser();
+        
     }
     const internData = () => {
         inquirer.prompt(internQuestions)
         .then(data => {
         let intern = new Intern(data.name,data.id,data.email,data.school);
         employeesArr.push(intern);
+        askUser();
         })
         // call the function to create this case
-        askUser();
+        
     }
 
     // Write file
     function writeFile(data){
+        // console.log(data);
         let htmlTemplate = generateHTML(data);
-
-        fs.write("./dist/index.html", htmlTemplate, (err) => {
+        // console.log(data);
+        
+        fs.writeFile("index.html", htmlTemplate, (err) => {
             err ? console.log(err) : console.log("Your team profile has been successfully created! Deploy the HTML file in the browser to see your profile!")
         })
     }
